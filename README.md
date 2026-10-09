@@ -20,7 +20,7 @@ Set `PY314` and `PY315` to interpreter paths to skip uv. Windows is not
 tested; on Windows the locale encoding is the ANSI code page, so `open()` with
 no `encoding` changes for almost every user there.
 
-The write-up is on DevOps Daily.
+The write-up is on DevOps Daily: [Python 3.15 made UTF-8 the default. We ran 13 cases in seven Linux locales to see what changes](https://devops-daily.com/posts/python-3-15-utf-8-default-linux-locales).
 
 ## Check your own code
 
