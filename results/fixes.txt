@@ -1,0 +1,13 @@
+## en_US.UTF-8, ISO-8859-1 byte on stdin: getting the 3.14 error back
+default:                      'caf\udce9\n'
+stdin.reconfigure(strict):    UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe9 in position 3: invalid continuation byte
+PYTHONIOENCODING=utf-8:strict UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe9 in position 3: invalid continuation byte
+sys.stdin.buffer (bytes):     b'caf\xe9\n'
+
+## LC_ALL=C with PYTHONUTF8=0: reading a UTF-8 file
+no encoding:                  UnicodeDecodeError: 'ascii' codec can't decode byte 0xc3 in position 3: ordinal not in range(128)
+encoding="utf-8":             'caf\xe9 25\u20ac\n'
+
+## LANG=en_US (ISO-8859-1): reading a legacy file on 3.15
+no encoding:                  UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe9 in position 3: invalid continuation byte
+encoding="latin-1":           'caf\xe9\n'

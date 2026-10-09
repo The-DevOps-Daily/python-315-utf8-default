@@ -10,6 +10,8 @@ python3 scripts/run_matrix.py      # 308 runs, about 2 minutes, writes results/m
 python3 scripts/summarize.py       # results/summary.md, one table per case
 python3 scripts/check_claim.py     # results/claim-check.txt, CLAIM.md checked against the runs
 ./scripts/consumers.sh             # what jq and node do with the JSON that 3.15 writes
+./scripts/fixes.sh                 # the fixes from the post, run on 3.15
+./scripts/checker_vs_runtime.sh    # the checker against -X warn_default_encoding on examples/
 ```
 
 Needs Linux with glibc (for `localedef`) and [uv](https://docs.astral.sh/uv/).
@@ -33,7 +35,9 @@ It reports every call that uses the default text encoding: `open()`,
 it found something. It is a static check, so also run your tests once with
 `python -X warn_default_encoding -W error::EncodingWarning`, which catches
 calls made through variables and wrappers. `tests/test_checker.py` holds the
-cases it must and must not report.
+cases it must and must not report (`python3 -m unittest tests/test_checker.py`).
+On `examples/release_notes.py`, the checker and the runtime warning report the
+same 6 lines (`results/checker-example.txt`).
 
 ## What the cases do
 

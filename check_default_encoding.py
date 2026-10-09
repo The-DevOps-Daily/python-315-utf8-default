@@ -220,6 +220,7 @@ def main(argv):
         for line, col, message in sorted(finder.findings):
             print(f"{path}:{line}:{col}: {message}")
         total += len(finder.findings)
+    sys.stdout.flush()
     print(f"{total} call(s) use the default encoding"
           + (f", {skipped} file(s) skipped" if skipped else ""), file=sys.stderr)
     return 1 if total else 0
