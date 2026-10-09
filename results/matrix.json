@@ -432,6 +432,150 @@
   }
  },
  {
+  "case": "probe",
+  "locale": "no locale",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "filesystem_encoding": "utf-8",
+   "lc_ctype": "C.UTF-8",
+   "lc_ctype_env": "C.UTF-8",
+   "locale_encoding": "UTF-8",
+   "preferred_encoding": "UTF-8",
+   "stdin": "utf-8/surrogateescape",
+   "stdout": "utf-8/surrogateescape",
+   "utf8_mode": 0,
+   "version": "3.14.8"
+  }
+ },
+ {
+  "case": "read_latin1",
+  "locale": "no locale",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe9 in position 3: invalid continuation byte"
+  }
+ },
+ {
+  "case": "read_latin1_locale",
+  "locale": "no locale",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe9 in position 3: invalid continuation byte"
+  }
+ },
+ {
+  "case": "read_utf8",
+  "locale": "no locale",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "ok 'caf\\xe9 25\\u20ac \\u2713\\n'"
+  }
+ },
+ {
+  "case": "write_text",
+  "locale": "no locale",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "ok b'caf\\xc3\\xa9 25\\xe2\\x82\\xac\\n'"
+  }
+ },
+ {
+  "case": "subprocess_latin1",
+  "locale": "no locale",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe9 in position 3: invalid continuation byte"
+  }
+ },
+ {
+  "case": "subprocess_utf8",
+  "locale": "no locale",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "ok 'caf\\xe9 25\\u20ac\\n'"
+  }
+ },
+ {
+  "case": "environ_argv",
+  "locale": "no locale",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "argv": "'caf\\udce9'",
+   "environ": "'caf\\udce9'",
+   "to_utf8": "UnicodeEncodeError: 'utf-8' codec can't encode character '\\udce9' in position 13: surrogates not allowed"
+  }
+ },
+ {
+  "case": "stdin_latin1",
+  "locale": "no locale",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "ok 'caf\\udce9\\n'"
+  }
+ },
+ {
+  "case": "stdin_to_json",
+  "locale": "no locale",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "ok b'{\"line\": \"caf\\\\udce9\\\\n\"}'"
+  }
+ },
+ {
+  "case": "stdin_utf8",
+  "locale": "no locale",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "ok 'caf\\xe9 25\\u20ac\\n'"
+  }
+ },
+ {
+  "case": "stdout_filename",
+  "locale": "no locale",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "listdir": "['report-\\udce9.csv']"
+  },
+  "stdout": "b'report-\\xe9.csv\\n'"
+ },
+ {
+  "case": "stdout_utf8",
+  "locale": "no locale",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "printed below"
+  },
+  "stdout": "b'caf\\xc3\\xa9 25\\xe2\\x82\\xac\\n'"
+ },
+ {
+  "case": "encoding_warning",
+  "locale": "no locale",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "flag": 1,
+   "warnings": [
+    "open(path).close() [EncodingWarning]",
+    "pathlib.Path(path).read_text() [EncodingWarning]",
+    "subprocess.run([\"true\"], capture_output=True, text=True) [EncodingWarning]",
+    "locale.getpreferredencoding() [EncodingWarning]"
+   ]
+  }
+ },
+ {
   "case": "handoff",
   "locale": "no locale",
   "column": "3.15 writes, 3.14 reads",
@@ -872,6 +1016,150 @@
   "case": "encoding_warning",
   "locale": "LANG=C",
   "column": "3.15 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "flag": 1,
+   "warnings": [
+    "open(path).close() [EncodingWarning]",
+    "pathlib.Path(path).read_text() [EncodingWarning]",
+    "subprocess.run([\"true\"], capture_output=True, text=True) [EncodingWarning]",
+    "locale.getpreferredencoding() [EncodingWarning]"
+   ]
+  }
+ },
+ {
+  "case": "probe",
+  "locale": "LANG=C",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "filesystem_encoding": "utf-8",
+   "lc_ctype": "C.UTF-8",
+   "lc_ctype_env": "C.UTF-8",
+   "locale_encoding": "UTF-8",
+   "preferred_encoding": "UTF-8",
+   "stdin": "utf-8/surrogateescape",
+   "stdout": "utf-8/surrogateescape",
+   "utf8_mode": 0,
+   "version": "3.14.8"
+  }
+ },
+ {
+  "case": "read_latin1",
+  "locale": "LANG=C",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe9 in position 3: invalid continuation byte"
+  }
+ },
+ {
+  "case": "read_latin1_locale",
+  "locale": "LANG=C",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe9 in position 3: invalid continuation byte"
+  }
+ },
+ {
+  "case": "read_utf8",
+  "locale": "LANG=C",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "ok 'caf\\xe9 25\\u20ac \\u2713\\n'"
+  }
+ },
+ {
+  "case": "write_text",
+  "locale": "LANG=C",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "ok b'caf\\xc3\\xa9 25\\xe2\\x82\\xac\\n'"
+  }
+ },
+ {
+  "case": "subprocess_latin1",
+  "locale": "LANG=C",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe9 in position 3: invalid continuation byte"
+  }
+ },
+ {
+  "case": "subprocess_utf8",
+  "locale": "LANG=C",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "ok 'caf\\xe9 25\\u20ac\\n'"
+  }
+ },
+ {
+  "case": "environ_argv",
+  "locale": "LANG=C",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "argv": "'caf\\udce9'",
+   "environ": "'caf\\udce9'",
+   "to_utf8": "UnicodeEncodeError: 'utf-8' codec can't encode character '\\udce9' in position 13: surrogates not allowed"
+  }
+ },
+ {
+  "case": "stdin_latin1",
+  "locale": "LANG=C",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "ok 'caf\\udce9\\n'"
+  }
+ },
+ {
+  "case": "stdin_to_json",
+  "locale": "LANG=C",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "ok b'{\"line\": \"caf\\\\udce9\\\\n\"}'"
+  }
+ },
+ {
+  "case": "stdin_utf8",
+  "locale": "LANG=C",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "ok 'caf\\xe9 25\\u20ac\\n'"
+  }
+ },
+ {
+  "case": "stdout_filename",
+  "locale": "LANG=C",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "listdir": "['report-\\udce9.csv']"
+  },
+  "stdout": "b'report-\\xe9.csv\\n'"
+ },
+ {
+  "case": "stdout_utf8",
+  "locale": "LANG=C",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "printed below"
+  },
+  "stdout": "b'caf\\xc3\\xa9 25\\xe2\\x82\\xac\\n'"
+ },
+ {
+  "case": "encoding_warning",
+  "locale": "LANG=C",
+  "column": "3.14 + PYTHONUTF8=0",
   "exit": 0,
   "result": {
    "flag": 1,
@@ -1337,6 +1625,151 @@
   }
  },
  {
+  "case": "probe",
+  "locale": "LC_ALL=C",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "filesystem_encoding": "ascii",
+   "lc_ctype": "C",
+   "lc_ctype_env": null,
+   "locale_encoding": "ANSI_X3.4-1968",
+   "preferred_encoding": "ANSI_X3.4-1968",
+   "stdin": "ascii/surrogateescape",
+   "stdout": "ascii/surrogateescape",
+   "utf8_mode": 0,
+   "version": "3.14.8"
+  }
+ },
+ {
+  "case": "read_latin1",
+  "locale": "LC_ALL=C",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "UnicodeDecodeError: 'ascii' codec can't decode byte 0xe9 in position 3: ordinal not in range(128)"
+  }
+ },
+ {
+  "case": "read_latin1_locale",
+  "locale": "LC_ALL=C",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "UnicodeDecodeError: 'ascii' codec can't decode byte 0xe9 in position 3: ordinal not in range(128)"
+  }
+ },
+ {
+  "case": "read_utf8",
+  "locale": "LC_ALL=C",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "UnicodeDecodeError: 'ascii' codec can't decode byte 0xc3 in position 3: ordinal not in range(128)"
+  }
+ },
+ {
+  "case": "write_text",
+  "locale": "LC_ALL=C",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "UnicodeEncodeError: 'ascii' codec can't encode character '\\xe9' in position 3: ordinal not in range(128)"
+  }
+ },
+ {
+  "case": "subprocess_latin1",
+  "locale": "LC_ALL=C",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "UnicodeDecodeError: 'ascii' codec can't decode byte 0xe9 in position 3: ordinal not in range(128)"
+  }
+ },
+ {
+  "case": "subprocess_utf8",
+  "locale": "LC_ALL=C",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "UnicodeDecodeError: 'ascii' codec can't decode byte 0xc3 in position 3: ordinal not in range(128)"
+  }
+ },
+ {
+  "case": "environ_argv",
+  "locale": "LC_ALL=C",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "argv": "'caf\\udce9'",
+   "environ": "'caf\\udce9'",
+   "to_utf8": "UnicodeEncodeError: 'utf-8' codec can't encode character '\\udce9' in position 13: surrogates not allowed"
+  }
+ },
+ {
+  "case": "stdin_latin1",
+  "locale": "LC_ALL=C",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "ok 'caf\\udce9\\n'"
+  }
+ },
+ {
+  "case": "stdin_to_json",
+  "locale": "LC_ALL=C",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "ok b'{\"line\": \"caf\\\\udce9\\\\n\"}'"
+  }
+ },
+ {
+  "case": "stdin_utf8",
+  "locale": "LC_ALL=C",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "ok 'caf\\udcc3\\udca9 25\\udce2\\udc82\\udcac\\n'"
+  }
+ },
+ {
+  "case": "stdout_filename",
+  "locale": "LC_ALL=C",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "listdir": "['report-\\udce9.csv']"
+  },
+  "stdout": "b'report-\\xe9.csv\\n'"
+ },
+ {
+  "case": "stdout_utf8",
+  "locale": "LC_ALL=C",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 1,
+  "result": {
+   "outcome": "printed below"
+  },
+  "stdout": "b''",
+  "stderr_tail": "UnicodeEncodeError: 'ascii' codec can't encode character '\\xe9' in position 3: ordinal not in range(128)"
+ },
+ {
+  "case": "encoding_warning",
+  "locale": "LC_ALL=C",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "flag": 1,
+   "warnings": [
+    "open(path).close() [EncodingWarning]",
+    "pathlib.Path(path).read_text() [EncodingWarning]",
+    "subprocess.run([\"true\"], capture_output=True, text=True) [EncodingWarning]",
+    "locale.getpreferredencoding() [EncodingWarning]"
+   ]
+  }
+ },
+ {
   "case": "handoff",
   "locale": "LC_ALL=C",
   "column": "3.15 writes, 3.14 reads",
@@ -1777,6 +2210,150 @@
   "case": "encoding_warning",
   "locale": "LANG=C.UTF-8",
   "column": "3.15 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "flag": 1,
+   "warnings": [
+    "open(path).close() [EncodingWarning]",
+    "pathlib.Path(path).read_text() [EncodingWarning]",
+    "subprocess.run([\"true\"], capture_output=True, text=True) [EncodingWarning]",
+    "locale.getpreferredencoding() [EncodingWarning]"
+   ]
+  }
+ },
+ {
+  "case": "probe",
+  "locale": "LANG=C.UTF-8",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "filesystem_encoding": "utf-8",
+   "lc_ctype": "C.UTF-8",
+   "lc_ctype_env": null,
+   "locale_encoding": "UTF-8",
+   "preferred_encoding": "UTF-8",
+   "stdin": "utf-8/surrogateescape",
+   "stdout": "utf-8/surrogateescape",
+   "utf8_mode": 0,
+   "version": "3.14.8"
+  }
+ },
+ {
+  "case": "read_latin1",
+  "locale": "LANG=C.UTF-8",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe9 in position 3: invalid continuation byte"
+  }
+ },
+ {
+  "case": "read_latin1_locale",
+  "locale": "LANG=C.UTF-8",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe9 in position 3: invalid continuation byte"
+  }
+ },
+ {
+  "case": "read_utf8",
+  "locale": "LANG=C.UTF-8",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "ok 'caf\\xe9 25\\u20ac \\u2713\\n'"
+  }
+ },
+ {
+  "case": "write_text",
+  "locale": "LANG=C.UTF-8",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "ok b'caf\\xc3\\xa9 25\\xe2\\x82\\xac\\n'"
+  }
+ },
+ {
+  "case": "subprocess_latin1",
+  "locale": "LANG=C.UTF-8",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe9 in position 3: invalid continuation byte"
+  }
+ },
+ {
+  "case": "subprocess_utf8",
+  "locale": "LANG=C.UTF-8",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "ok 'caf\\xe9 25\\u20ac\\n'"
+  }
+ },
+ {
+  "case": "environ_argv",
+  "locale": "LANG=C.UTF-8",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "argv": "'caf\\udce9'",
+   "environ": "'caf\\udce9'",
+   "to_utf8": "UnicodeEncodeError: 'utf-8' codec can't encode character '\\udce9' in position 13: surrogates not allowed"
+  }
+ },
+ {
+  "case": "stdin_latin1",
+  "locale": "LANG=C.UTF-8",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "ok 'caf\\udce9\\n'"
+  }
+ },
+ {
+  "case": "stdin_to_json",
+  "locale": "LANG=C.UTF-8",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "ok b'{\"line\": \"caf\\\\udce9\\\\n\"}'"
+  }
+ },
+ {
+  "case": "stdin_utf8",
+  "locale": "LANG=C.UTF-8",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "ok 'caf\\xe9 25\\u20ac\\n'"
+  }
+ },
+ {
+  "case": "stdout_filename",
+  "locale": "LANG=C.UTF-8",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "listdir": "['report-\\udce9.csv']"
+  },
+  "stdout": "b'report-\\xe9.csv\\n'"
+ },
+ {
+  "case": "stdout_utf8",
+  "locale": "LANG=C.UTF-8",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "printed below"
+  },
+  "stdout": "b'caf\\xc3\\xa9 25\\xe2\\x82\\xac\\n'"
+ },
+ {
+  "case": "encoding_warning",
+  "locale": "LANG=C.UTF-8",
+  "column": "3.14 + PYTHONUTF8=0",
   "exit": 0,
   "result": {
    "flag": 1,
@@ -2243,6 +2820,151 @@
   }
  },
  {
+  "case": "probe",
+  "locale": "LANG=en_US.UTF-8",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "filesystem_encoding": "utf-8",
+   "lc_ctype": "en_US.UTF-8",
+   "lc_ctype_env": null,
+   "locale_encoding": "UTF-8",
+   "preferred_encoding": "UTF-8",
+   "stdin": "utf-8/strict",
+   "stdout": "utf-8/strict",
+   "utf8_mode": 0,
+   "version": "3.14.8"
+  }
+ },
+ {
+  "case": "read_latin1",
+  "locale": "LANG=en_US.UTF-8",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe9 in position 3: invalid continuation byte"
+  }
+ },
+ {
+  "case": "read_latin1_locale",
+  "locale": "LANG=en_US.UTF-8",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe9 in position 3: invalid continuation byte"
+  }
+ },
+ {
+  "case": "read_utf8",
+  "locale": "LANG=en_US.UTF-8",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "ok 'caf\\xe9 25\\u20ac \\u2713\\n'"
+  }
+ },
+ {
+  "case": "write_text",
+  "locale": "LANG=en_US.UTF-8",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "ok b'caf\\xc3\\xa9 25\\xe2\\x82\\xac\\n'"
+  }
+ },
+ {
+  "case": "subprocess_latin1",
+  "locale": "LANG=en_US.UTF-8",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe9 in position 3: invalid continuation byte"
+  }
+ },
+ {
+  "case": "subprocess_utf8",
+  "locale": "LANG=en_US.UTF-8",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "ok 'caf\\xe9 25\\u20ac\\n'"
+  }
+ },
+ {
+  "case": "environ_argv",
+  "locale": "LANG=en_US.UTF-8",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "argv": "'caf\\udce9'",
+   "environ": "'caf\\udce9'",
+   "to_utf8": "UnicodeEncodeError: 'utf-8' codec can't encode character '\\udce9' in position 13: surrogates not allowed"
+  }
+ },
+ {
+  "case": "stdin_latin1",
+  "locale": "LANG=en_US.UTF-8",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe9 in position 3: invalid continuation byte"
+  }
+ },
+ {
+  "case": "stdin_to_json",
+  "locale": "LANG=en_US.UTF-8",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe9 in position 3: invalid continuation byte"
+  }
+ },
+ {
+  "case": "stdin_utf8",
+  "locale": "LANG=en_US.UTF-8",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "ok 'caf\\xe9 25\\u20ac\\n'"
+  }
+ },
+ {
+  "case": "stdout_filename",
+  "locale": "LANG=en_US.UTF-8",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 1,
+  "result": {
+   "listdir": "['report-\\udce9.csv']"
+  },
+  "stdout": "b''",
+  "stderr_tail": "UnicodeEncodeError: 'utf-8' codec can't encode character '\\udce9' in position 7: surrogates not allowed"
+ },
+ {
+  "case": "stdout_utf8",
+  "locale": "LANG=en_US.UTF-8",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "printed below"
+  },
+  "stdout": "b'caf\\xc3\\xa9 25\\xe2\\x82\\xac\\n'"
+ },
+ {
+  "case": "encoding_warning",
+  "locale": "LANG=en_US.UTF-8",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "flag": 1,
+   "warnings": [
+    "open(path).close() [EncodingWarning]",
+    "pathlib.Path(path).read_text() [EncodingWarning]",
+    "subprocess.run([\"true\"], capture_output=True, text=True) [EncodingWarning]",
+    "locale.getpreferredencoding() [EncodingWarning]"
+   ]
+  }
+ },
+ {
   "case": "handoff",
   "locale": "LANG=en_US.UTF-8",
   "column": "3.15 writes, 3.14 reads",
@@ -2685,6 +3407,151 @@
   "case": "encoding_warning",
   "locale": "LANG=en_US",
   "column": "3.15 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "flag": 1,
+   "warnings": [
+    "open(path).close() [EncodingWarning]",
+    "pathlib.Path(path).read_text() [EncodingWarning]",
+    "subprocess.run([\"true\"], capture_output=True, text=True) [EncodingWarning]",
+    "locale.getpreferredencoding() [EncodingWarning]"
+   ]
+  }
+ },
+ {
+  "case": "probe",
+  "locale": "LANG=en_US",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "filesystem_encoding": "iso8859-1",
+   "lc_ctype": "en_US",
+   "lc_ctype_env": null,
+   "locale_encoding": "ISO-8859-1",
+   "preferred_encoding": "ISO-8859-1",
+   "stdin": "iso8859-1/strict",
+   "stdout": "iso8859-1/strict",
+   "utf8_mode": 0,
+   "version": "3.14.8"
+  }
+ },
+ {
+  "case": "read_latin1",
+  "locale": "LANG=en_US",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "ok 'caf\\xe9 na\\xefve r\\xe9sum\\xe9\\n'"
+  }
+ },
+ {
+  "case": "read_latin1_locale",
+  "locale": "LANG=en_US",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "ok 'caf\\xe9 na\\xefve r\\xe9sum\\xe9\\n'"
+  }
+ },
+ {
+  "case": "read_utf8",
+  "locale": "LANG=en_US",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "ok 'caf\\xc3\\xa9 25\\xe2\\x82\\xac \\xe2\\x9c\\x93\\n'"
+  }
+ },
+ {
+  "case": "write_text",
+  "locale": "LANG=en_US",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "UnicodeEncodeError: 'latin-1' codec can't encode character '\\u20ac' in position 7: ordinal not in range(256)"
+  }
+ },
+ {
+  "case": "subprocess_latin1",
+  "locale": "LANG=en_US",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "ok 'caf\\xe9\\n'"
+  }
+ },
+ {
+  "case": "subprocess_utf8",
+  "locale": "LANG=en_US",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "ok 'caf\\xc3\\xa9 25\\xe2\\x82\\xac\\n'"
+  }
+ },
+ {
+  "case": "environ_argv",
+  "locale": "LANG=en_US",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "argv": "'caf\\xe9'",
+   "environ": "'caf\\xe9'",
+   "to_utf8": "ok b'{\"name\": \"caf\\xc3\\xa9\"}'"
+  }
+ },
+ {
+  "case": "stdin_latin1",
+  "locale": "LANG=en_US",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "ok 'caf\\xe9\\n'"
+  }
+ },
+ {
+  "case": "stdin_to_json",
+  "locale": "LANG=en_US",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "ok b'{\"line\": \"caf\\\\u00e9\\\\n\"}'"
+  }
+ },
+ {
+  "case": "stdin_utf8",
+  "locale": "LANG=en_US",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "ok 'caf\\xc3\\xa9 25\\xe2\\x82\\xac\\n'"
+  }
+ },
+ {
+  "case": "stdout_filename",
+  "locale": "LANG=en_US",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "listdir": "['report-\\xe9.csv']"
+  },
+  "stdout": "b'report-\\xe9.csv\\n'"
+ },
+ {
+  "case": "stdout_utf8",
+  "locale": "LANG=en_US",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 1,
+  "result": {
+   "outcome": "printed below"
+  },
+  "stdout": "b''",
+  "stderr_tail": "UnicodeEncodeError: 'latin-1' codec can't encode character '\\u20ac' in position 7: ordinal not in range(256)"
+ },
+ {
+  "case": "encoding_warning",
+  "locale": "LANG=en_US",
+  "column": "3.14 + PYTHONUTF8=0",
   "exit": 0,
   "result": {
    "flag": 1,
@@ -3141,6 +4008,152 @@
   "case": "encoding_warning",
   "locale": "LANG=ja_JP.eucJP",
   "column": "3.15 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "flag": 1,
+   "warnings": [
+    "open(path).close() [EncodingWarning]",
+    "pathlib.Path(path).read_text() [EncodingWarning]",
+    "subprocess.run([\"true\"], capture_output=True, text=True) [EncodingWarning]",
+    "locale.getpreferredencoding() [EncodingWarning]"
+   ]
+  }
+ },
+ {
+  "case": "probe",
+  "locale": "LANG=ja_JP.eucJP",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "filesystem_encoding": "euc_jp",
+   "lc_ctype": "ja_JP.eucJP",
+   "lc_ctype_env": null,
+   "locale_encoding": "EUC-JP",
+   "preferred_encoding": "EUC-JP",
+   "stdin": "euc_jp/strict",
+   "stdout": "euc_jp/strict",
+   "utf8_mode": 0,
+   "version": "3.14.8"
+  }
+ },
+ {
+  "case": "read_latin1",
+  "locale": "LANG=ja_JP.eucJP",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "UnicodeDecodeError: 'euc_jp' codec can't decode byte 0xe9 in position 3: illegal multibyte sequence"
+  }
+ },
+ {
+  "case": "read_latin1_locale",
+  "locale": "LANG=ja_JP.eucJP",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "UnicodeDecodeError: 'euc_jp' codec can't decode byte 0xe9 in position 3: illegal multibyte sequence"
+  }
+ },
+ {
+  "case": "read_utf8",
+  "locale": "LANG=ja_JP.eucJP",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "UnicodeDecodeError: 'euc_jp' codec can't decode byte 0xe2 in position 8: illegal multibyte sequence"
+  }
+ },
+ {
+  "case": "write_text",
+  "locale": "LANG=ja_JP.eucJP",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "UnicodeEncodeError: 'euc_jp' codec can't encode character '\\u20ac' in position 7: illegal multibyte sequence"
+  }
+ },
+ {
+  "case": "subprocess_latin1",
+  "locale": "LANG=ja_JP.eucJP",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "UnicodeDecodeError: 'euc_jp' codec can't decode byte 0xe9 in position 3: illegal multibyte sequence"
+  }
+ },
+ {
+  "case": "subprocess_utf8",
+  "locale": "LANG=ja_JP.eucJP",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "UnicodeDecodeError: 'euc_jp' codec can't decode byte 0xe2 in position 8: illegal multibyte sequence"
+  }
+ },
+ {
+  "case": "environ_argv",
+  "locale": "LANG=ja_JP.eucJP",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "argv": "'caf\\udce9'",
+   "environ": "'caf\\udce9'",
+   "to_utf8": "UnicodeEncodeError: 'utf-8' codec can't encode character '\\udce9' in position 13: surrogates not allowed"
+  }
+ },
+ {
+  "case": "stdin_latin1",
+  "locale": "LANG=ja_JP.eucJP",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "UnicodeDecodeError: 'euc_jp' codec can't decode byte 0xe9 in position 3: illegal multibyte sequence"
+  }
+ },
+ {
+  "case": "stdin_to_json",
+  "locale": "LANG=ja_JP.eucJP",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "UnicodeDecodeError: 'euc_jp' codec can't decode byte 0xe9 in position 3: illegal multibyte sequence"
+  }
+ },
+ {
+  "case": "stdin_utf8",
+  "locale": "LANG=ja_JP.eucJP",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 0,
+  "result": {
+   "outcome": "UnicodeDecodeError: 'euc_jp' codec can't decode byte 0xe2 in position 8: illegal multibyte sequence"
+  }
+ },
+ {
+  "case": "stdout_filename",
+  "locale": "LANG=ja_JP.eucJP",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 1,
+  "result": {
+   "listdir": "['report-\\udce9.csv']"
+  },
+  "stdout": "b''",
+  "stderr_tail": "UnicodeEncodeError: 'euc_jp' codec can't encode character '\\udce9' in position 7: illegal multibyte sequence"
+ },
+ {
+  "case": "stdout_utf8",
+  "locale": "LANG=ja_JP.eucJP",
+  "column": "3.14 + PYTHONUTF8=0",
+  "exit": 1,
+  "result": {
+   "outcome": "printed below"
+  },
+  "stdout": "b''",
+  "stderr_tail": "UnicodeEncodeError: 'euc_jp' codec can't encode character '\\u20ac' in position 7: illegal multibyte sequence"
+ },
+ {
+  "case": "encoding_warning",
+  "locale": "LANG=ja_JP.eucJP",
+  "column": "3.14 + PYTHONUTF8=0",
   "exit": 0,
   "result": {
    "flag": 1,

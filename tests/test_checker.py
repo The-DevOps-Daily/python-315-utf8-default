@@ -1,5 +1,8 @@
 import ast
+import contextlib
+import io
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -21,6 +24,18 @@ class CheckerTest(unittest.TestCase):
         self.assertEqual(sorted(found - expected), [], "reported but not marked")
         self.assertEqual(sorted(expected - found), [], "marked but not reported")
         self.assertEqual(len(finder.findings), len(found), "one finding per line")
+
+    def test_exit_status(self):
+        with tempfile.TemporaryDirectory() as folder:
+            clean = Path(folder, "clean.py")
+            clean.write_text('open("a", encoding="utf-8")\n', encoding="utf-8")
+            broken = Path(folder, "broken.py")
+            broken.write_text("def (:\n", encoding="utf-8")
+            with contextlib.redirect_stdout(io.StringIO()), \
+                    contextlib.redirect_stderr(io.StringIO()):
+                self.assertEqual(check_default_encoding.main([str(clean)]), 0)
+                self.assertEqual(check_default_encoding.main([str(broken)]), 2)
+                self.assertEqual(check_default_encoding.main([str(FIXTURE)]), 1)
 
 
 if __name__ == "__main__":

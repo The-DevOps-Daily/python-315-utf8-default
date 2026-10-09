@@ -69,3 +69,32 @@ logging.basicConfig(level=10)
 tempfile.NamedTemporaryFile("w")  # expect
 tempfile.NamedTemporaryFile()
 tempfile.TemporaryFile(mode="w+", encoding="utf-8")
+tempfile.SpooledTemporaryFile(1024, "w+")  # expect
+tempfile.SpooledTemporaryFile(1024)
+tempfile.SpooledTemporaryFile(1024, "w+", -1, "utf-8")
+
+open("a.txt", encoding=None)  # expect
+open("a.txt", "r", -1, None)  # expect
+Path("a.txt").read_text(None)  # expect
+open("a.txt", **{})  # expect
+open("a.txt", **{"errors": "replace"})  # expect
+open("a.txt", **{"encoding": None})  # expect
+open("a.txt", **options)
+subprocess.run(["ls"], capture_output=True, errors="replace")  # expect
+subprocess.run(["ls"], capture_output=True, errors=None)
+
+config_file = Path("service.ini")
+config_file.open()  # expect
+(Path("dir") / "notes.txt").open()  # expect
+Path("dir").parent.joinpath("x.txt").open("w")  # expect
+(Path("dir") / "blob.bin").open("rb")
+some_object.open()
+
+
+def load(cfg: Path, other: str):
+    cfg.open()  # expect
+    other.open()
+
+
+def save(target: pathlib.Path):
+    target.open("a")  # expect

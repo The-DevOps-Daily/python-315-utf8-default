@@ -1,21 +1,9 @@
 ## static: check_default_encoding.py examples/
 examples/release_notes.py:12:1: logging.basicConfig(filename=...) without encoding
-examples/release_notes.py:16:11: subprocess.run(text=True) without encoding
+examples/release_notes.py:16:11: subprocess.run() in text mode without encoding
 examples/release_notes.py:23:24: .read_text() without encoding
 examples/release_notes.py:24:16: open() without encoding
 examples/release_notes.py:27:5: .write_text() without encoding
 examples/release_notes.py:28:10: open() without encoding
 6 call(s) use the default encoding
 
-## runtime: python3.15 -X warn_default_encoding examples/release_notes.py v0
-examples/release_notes.py:12: EncodingWarning: 'encoding' argument not specified
-examples/release_notes.py:16: EncodingWarning: 'encoding' argument not specified.
-examples/release_notes.py:23: EncodingWarning: 'encoding' argument not specified
-examples/release_notes.py:24: EncodingWarning: 'encoding' argument not specified
-examples/release_notes.py:27: EncodingWarning: 'encoding' argument not specified
-examples/release_notes.py:28: EncodingWarning: 'encoding' argument not specified
-
-## RELEASE_NOTES.md
-# billing
-
-Fix the café menu price in €

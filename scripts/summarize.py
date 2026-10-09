@@ -36,6 +36,8 @@ def cell(row):
                 f"stdout {res['stdout']}")
     if "stdout" in row:
         text = f"exit {row['exit']}, wrote {row['stdout']}"
+        if "listdir" in res:
+            text = f"listdir {res['listdir']}; " + text
         if row["exit"]:
             text += f"; {row.get('stderr_tail', '')}"
         return text

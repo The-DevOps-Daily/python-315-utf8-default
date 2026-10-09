@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Run every case in cases/ on Python 3.14, 3.15, and 3.15 with PYTHONUTF8=0,
-in seven locales, and write results/matrix.json.
+"""Run every case in cases/ on Python 3.14 and 3.15, each with its default and
+with PYTHONUTF8=0, in seven locales, and write results/matrix.json.
 
 Each run starts from an empty environment (only PATH, LOCPATH and the locale
 variables), so nothing from your shell leaks in.
@@ -71,8 +71,9 @@ def find_python(minor):
 
 def columns():
     py314, py315 = find_python("3.14"), find_python("3.15")
+    off = {b"PYTHONUTF8": b"0"}
     return [("3.14", py314, {}), ("3.15", py315, {}),
-            ("3.15 + PYTHONUTF8=0", py315, {b"PYTHONUTF8": b"0"})]
+            ("3.15 + PYTHONUTF8=0", py315, off), ("3.14 + PYTHONUTF8=0", py314, off)]
 
 
 def base_env(locale_vars):
@@ -83,7 +84,12 @@ def base_env(locale_vars):
     return env
 
 
+LAUNCHES = 0
+
+
 def run_case(case, python, extra_env, locale_vars, workdir, argv_tail=()):
+    global LAUNCHES
+    LAUNCHES += 1
     spec = CASE_SPECS.get(case, {})
     result_path = Path(workdir) / f"{case}.json"
     env = base_env(locale_vars)
@@ -157,10 +163,11 @@ def main():
         f"libc={os.confstr('CS_GNU_LIBC_VERSION')}",
         f"python_3.14={probe['3.14']}",
         f"python_3.15={probe['3.15']}",
-        f"runs={len(rows)}",
+        f"results={len(rows)}",
+        f"interpreter_runs={LAUNCHES}",
     ]
     (RESULTS / "environment.txt").write_text("\n".join(env_lines) + "\n", encoding="utf-8")
-    print(f"{len(rows)} runs written to results/matrix.json")
+    print(f"{len(rows)} results from {LAUNCHES} interpreter runs written to results/matrix.json")
 
 
 if __name__ == "__main__":

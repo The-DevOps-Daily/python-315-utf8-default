@@ -1,12 +1,13 @@
 # python-315-utf8-default
 
 Python 3.15 turns on UTF-8 mode by default (PEP 686). This repo runs the same
-13 cases on Python 3.14 and 3.15 in seven Linux locales and records what
-changes, then gives you a checker for your own code.
+13 cases on Python 3.14 and 3.15, each with its default and with
+`PYTHONUTF8=0`, in seven Linux locales, and records what changes. Then it
+gives you a checker for your own code.
 
 ```bash
 ./scripts/setup.sh                 # uv installs 3.14.8 and 3.15.0; localedef builds ./locales
-python3 scripts/run_matrix.py      # 308 runs, about 2 minutes, writes results/matrix.json
+python3 scripts/run_matrix.py      # 406 results from 420 runs, about 3 minutes, writes results/matrix.json
 python3 scripts/summarize.py       # results/summary.md, one table per case
 python3 scripts/check_claim.py     # results/claim-check.txt, CLAIM.md checked against the runs
 ./scripts/consumers.sh             # what jq and node do with the JSON that 3.15 writes

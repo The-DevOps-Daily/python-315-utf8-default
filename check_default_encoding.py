@@ -7,9 +7,13 @@ and on UTF-8 mode from 3.15. Each finding is a place to add encoding="utf-8"
 
     python3 check_default_encoding.py src/ scripts/deploy.py
 
-Exit status is 1 when anything is found. This is a static check, so it can
-miss calls made through a variable (f = open; f(path)) and wrappers in your own
-code. Run your tests with -X warn_default_encoding as well; that catches what
+Exit status is 1 when anything is found, and 2 when nothing is found but some
+files could not be parsed (run it with the interpreter your code targets).
+
+This is a static check, so it misses calls made through a variable
+(f = open; f(path)), wrappers in your own code, Path objects it cannot see
+(a Path returned by another function), and calls whose **kwargs it cannot
+read. Run your tests with -X warn_default_encoding as well; that catches what
 this misses.
 """
 import ast
@@ -23,8 +27,13 @@ LOGGING_HANDLERS = {"FileHandler": 2, "WatchedFileHandler": 2, "RotatingFileHand
                     "TimedRotatingFileHandler": 4}
 # compressed-file openers: text only with "t" in the mode
 COMPRESSED_OPEN = {"gzip.open": 3, "bz2.open": 3, "lzma.open": None}
-TEMPFILE_TEXT = {"TemporaryFile", "NamedTemporaryFile", "SpooledTemporaryFile"}
+# tempfile class -> (position of mode, position of encoding)
+TEMPFILE_TEXT = {"TemporaryFile": (0, 2), "NamedTemporaryFile": (0, 2),
+                 "SpooledTemporaryFile": (1, 3)}
 PATH_CLASSES = {"Path", "PosixPath", "WindowsPath"}
+# Path methods that return another Path
+PATH_METHODS = {"joinpath", "with_name", "with_stem", "with_suffix", "resolve", "absolute",
+                "expanduser", "relative_to"}
 
 
 def keyword(call, name):
@@ -34,13 +43,30 @@ def keyword(call, name):
     return None
 
 
+def is_none(node):
+    return isinstance(node, ast.Constant) and node.value is None
+
+
 def has_encoding(call, position):
-    """True if encoding is given as a keyword or as positional argument `position`."""
-    if keyword(call, "encoding") is not None:
-        return True
-    if any(kw.arg is None for kw in call.keywords):  # **kwargs: cannot tell
-        return True
-    return position is not None and len(call.args) > position
+    """True if a non-None encoding is given as a keyword or at positional `position`.
+
+    A **mapping that is a dict literal is read; any other **mapping might carry
+    an encoding, so it counts as given (a known blind spot, see the docstring)."""
+    node = keyword(call, "encoding")
+    if node is not None:
+        return not is_none(node)
+    for kw in call.keywords:
+        if kw.arg is None:
+            if not isinstance(kw.value, ast.Dict):
+                return True
+            for key, value in zip(kw.value.keys, kw.value.values):
+                if key is None:  # {**other}: cannot tell
+                    return True
+                if isinstance(key, ast.Constant) and key.value == "encoding":
+                    return not is_none(value)
+    if position is not None and len(call.args) > position:
+        return not is_none(call.args[position])
+    return False
 
 
 def mode_of(call, position, default):
@@ -64,6 +90,7 @@ class Finder(ast.NodeVisitor):
         self.findings = []
         self.modules = {}  # local name -> module, from "import x" and "import x as y"
         self.names = {}    # local name -> "module.attr", from "from x import y"
+        self.path_vars = set()  # names assigned a Path or annotated as one (module-wide)
 
     def visit_Import(self, node):
         for alias in node.names:
@@ -79,6 +106,48 @@ class Finder(ast.NodeVisitor):
             if node.module:
                 self.names[alias.asname or alias.name] = f"{node.module}.{alias.name}"
         self.generic_visit(node)
+
+    def visit_Assign(self, node):
+        if self.is_path_expr(node.value):
+            for target in node.targets:
+                if isinstance(target, ast.Name):
+                    self.path_vars.add(target.id)
+        self.generic_visit(node)
+
+    def visit_AnnAssign(self, node):
+        if isinstance(node.target, ast.Name) and (
+                self.is_path_annotation(node.annotation)
+                or (node.value is not None and self.is_path_expr(node.value))):
+            self.path_vars.add(node.target.id)
+        self.generic_visit(node)
+
+    def visit_FunctionDef(self, node):
+        args = node.args
+        for arg in [*args.posonlyargs, *args.args, *args.kwonlyargs]:
+            if arg.annotation is not None and self.is_path_annotation(arg.annotation):
+                self.path_vars.add(arg.arg)
+        self.generic_visit(node)
+
+    visit_AsyncFunctionDef = visit_FunctionDef
+
+    def is_path_annotation(self, node):
+        name = self.qualified(node) if isinstance(node, (ast.Name, ast.Attribute)) else None
+        return bool(name) and name.rsplit(".", 1)[-1] in PATH_CLASSES
+
+    def is_path_expr(self, node):
+        if isinstance(node, ast.Name):
+            return node.id in self.path_vars
+        if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Div):
+            return self.is_path_expr(node.left)
+        if isinstance(node, ast.Attribute) and node.attr == "parent":
+            return self.is_path_expr(node.value)
+        if isinstance(node, ast.Call):
+            func = node.func
+            if isinstance(func, ast.Attribute) and func.attr in PATH_METHODS:
+                return self.is_path_expr(func.value)
+            name = self.qualified(func)
+            return bool(name) and name.rsplit(".", 1)[-1] in PATH_CLASSES
+        return False
 
     def qualified(self, func):
         """Return "module.attr" for a call target, or the bare builtin name."""
@@ -150,8 +219,11 @@ class Finder(ast.NodeVisitor):
                 return
             if attr in SUBPROCESS_TEXT:
                 text = keyword(node, "text") or keyword(node, "universal_newlines")
-                if text is not None and truthy_literal(text) and not has_encoding(node, None):
-                    self.add(node, f"subprocess.{attr}(text=True) without encoding")
+                errors = keyword(node, "errors")
+                text_mode = (text is not None and truthy_literal(text)) or \
+                    (errors is not None and not is_none(errors))
+                if text_mode and not has_encoding(node, None):
+                    self.add(node, f"subprocess.{attr}() in text mode without encoding")
             return
 
         if name and (name.startswith("logging.") or name.startswith("logging.handlers.")):
@@ -166,8 +238,9 @@ class Finder(ast.NodeVisitor):
         if name and name.startswith("tempfile."):
             attr = name.split(".", 1)[1]
             if attr in TEMPFILE_TEXT:
-                mode = mode_of(node, 0, "w+b")
-                if mode is not None and "b" not in mode and not has_encoding(node, None):
+                mode_pos, enc_pos = TEMPFILE_TEXT[attr]
+                mode = mode_of(node, mode_pos, "w+b")
+                if mode is not None and "b" not in mode and not has_encoding(node, enc_pos):
                     self.add(node, f"tempfile.{attr}(mode={mode!r}) without encoding")
             return
 
@@ -176,18 +249,10 @@ class Finder(ast.NodeVisitor):
                 self.add(node, ".read_text() without encoding")
             elif func.attr == "write_text" and not has_encoding(node, 1):
                 self.add(node, ".write_text() without encoding")
-            elif func.attr == "open" and self.is_path_call(func.value):
+            elif func.attr == "open" and self.is_path_expr(func.value):
                 mode = mode_of(node, 0, "r")
                 if (mode is None or "b" not in mode) and not has_encoding(node, 2):
                     self.add(node, "Path.open() without encoding")
-
-    def is_path_call(self, node):
-        if not isinstance(node, ast.Call):
-            return False
-        name = self.qualified(node.func)
-        if name is None:
-            return False
-        return name.rsplit(".", 1)[-1] in PATH_CLASSES
 
 
 def python_files(paths):
@@ -223,7 +288,9 @@ def main(argv):
     sys.stdout.flush()
     print(f"{total} call(s) use the default encoding"
           + (f", {skipped} file(s) skipped" if skipped else ""), file=sys.stderr)
-    return 1 if total else 0
+    if total:
+        return 1
+    return 2 if skipped else 0
 
 
 if __name__ == "__main__":

@@ -9,12 +9,13 @@ out=results/consumers.txt
 work=$(mktemp -d)
 trap 'rm -rf "$work"' EXIT
 
-printf 'caf\351\n' | env -i PATH=/usr/bin:/bin LOCPATH="$PWD/locales" LANG=en_US.UTF-8 \
+printf 'caf\351\n' > "$work/input"
+env -i PATH=/usr/bin:/bin LOCPATH="$PWD/locales" LANG=en_US.UTF-8 \
   "$PY315" -c 'import json, sys; print(json.dumps({"line": sys.stdin.read().strip()}))' \
-  > "$work/line.json"
+  < "$work/input" > "$work/line.json"
 
 {
-  echo "input bytes on stdin:   63 61 66 e9"
+  echo "input bytes on stdin:   $(od -An -tx1 "$work/input" | xargs) (the script strips the newline)"
   echo "3.15 wrote:             $(cat "$work/line.json")"
   if command -v jq >/dev/null; then
     echo "$(jq --version) -r .line: $(jq -r .line "$work/line.json" | od -An -tx1 | xargs)"

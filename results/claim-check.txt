@@ -2,17 +2,17 @@ PASS  no locale: 3.14 and 3.15 agree in every case
 PASS  LANG=C: 3.14 and 3.15 agree in every case
 PASS  LC_ALL=C: 3.14 and 3.15 agree in every case
 PASS  LANG=C.UTF-8: open(), subprocess and environment cases agree
-      probe
 FAIL  LANG=C.UTF-8: invalid UTF-8 on stdin/stdout differs between 3.14 and 3.15
-      differs: probe
+      differs: nothing
 PASS  LANG=en_US.UTF-8: open(), subprocess and environment cases agree
-      probe, stdin_latin1, stdin_to_json, stdout_filename
+      stdin_latin1, stdin_to_json, stdout_filename
 PASS  LANG=en_US.UTF-8: invalid UTF-8 on stdin/stdout differs between 3.14 and 3.15
-      differs: probe, stdin_latin1, stdin_to_json, stdout_filename
-PASS  LANG=en_US: cases that differ
-      probe, read_latin1, read_utf8, write_text, subprocess_latin1, subprocess_utf8, environ_argv, stdin_latin1, stdin_to_json, stdin_utf8, stdout_filename, stdout_utf8
-PASS  LANG=ja_JP.eucJP: cases that differ
-      probe, read_latin1, read_utf8, write_text, subprocess_latin1, subprocess_utf8, stdin_latin1, stdin_to_json, stdin_utf8, stdout_filename, stdout_utf8
-FAIL  3.15 + PYTHONUTF8=0 gives the 3.14 result in every case
+      differs: stdin_latin1, stdin_to_json, stdout_filename
+PASS  LANG=en_US: every case that uses the default encoding differs (11 of 13)
+      agree: read_latin1_locale, encoding_warning
+FAIL  LANG=ja_JP.eucJP: every case that uses the default encoding differs (10 of 13)
+      agree: read_latin1_locale, environ_argv, encoding_warning
+FAIL  3.15 + PYTHONUTF8=0 gives the 3.14 default result in every case
       LC_ALL=C: read_latin1; LC_ALL=C: read_utf8; LC_ALL=C: write_text; LC_ALL=C: subprocess_latin1; LC_ALL=C: subprocess_utf8; LC_ALL=C: stdin_utf8; LC_ALL=C: stdout_utf8
+PASS  PYTHONUTF8=0 gives the same result on 3.14 and 3.15 in every case
 PASS  -X warn_default_encoding reports the same 4 calls on 3.14 and 3.15
