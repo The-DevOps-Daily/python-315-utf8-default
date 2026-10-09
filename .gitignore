@@ -1,0 +1,4 @@
+locales/
+work/
+__pycache__/
+*.pyc
